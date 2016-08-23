@@ -25,7 +25,7 @@ module.exports = class ImageSaver {
         }
 
         options = Extend({
-            images_path: 'public/images',
+            images_path: 'public/images/',
             base64_structure: {
                 filetype:'something',
                 filename:'something',
@@ -64,25 +64,31 @@ module.exports = class ImageSaver {
         if(typeof collection === 'undefined')
             collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name);
 
-        return content.forEach((value, key)=>{
-            if (this.base64Pattern(value)) {
-                collection.add(value)
-                    .then((image)=>{content[key] = name});
+        var content = JSON.parse(JSON.stringify(content));
+        var promises = [];
+        Object.keys(content).forEach((value)=>{
+            if (this.base64Pattern(content[value])) {
+                promises.push(collection.add(content[value])
+                    .then((image)=>{content[value] = image.name}));
             }
-            else if(typeof value === 'object')
-                content[key] = this.parse(value, collection);
-        })
+            else if(typeof content[value] === 'object')
+                promises.push(this.parse(content[value], collection)
+                    .then((contentReceived)=>{content[value] = contentReceived}));
+        });
+
+        return Promise.all(promises).then(()=>{return content});
     }
 
 
     base64Pattern(obj, structure) {
-        if(typeof obj === 'undefined')
-            return false;
-
         if(typeof structure === 'undefined')
             structure = this.options.base64_structure;
 
-        if(typeof obj !== 'object')
+        //end
+        if(typeof obj === 'undefined')
+            return false;
+
+        if(typeof structure !== 'object')
             return true;
 
         var structureKeys = Object.keys(structure);

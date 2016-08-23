@@ -3,6 +3,7 @@
  */
 var chai = require('chai');
 var ImageSaver = require('../src/imageSaver');
+var fs = require('fs');
 //var assert = chai.assert;
 
 // npm test --coverage to get coverage
@@ -42,7 +43,7 @@ describe('Image Saver', () => {
             it('Should insert default options', () => {
                 var imageSaver = new ImageSaver('{"pippo":"test"}');
                 JSON.stringify(imageSaver.options).should.be.equal(JSON.stringify({
-                    images_path: 'public/images',
+                    images_path: 'public/images/',
                     base64_structure: {
                         filetype: 'something',
                         filename: 'something',
@@ -77,9 +78,10 @@ describe('Image Saver', () => {
             var data = {
                 test:"tttt",
                 img:JSON.parse(JSON.stringify(exampleImage))
-            }
+            };
             var imageSaver = new ImageSaver(data);
             imageSaver.base64Pattern().should.be.equal(false); //empty object
+            imageSaver.base64Pattern(data.test).should.be.equal(false); //wrong element
             imageSaver.base64Pattern(data).should.be.equal(false);
             imageSaver.base64Pattern(data.img).should.be.equal(true);
         });
@@ -191,7 +193,65 @@ describe('Image Saver', () => {
                 imageSaver.base64Pattern(data.img).should.be.equal(true);
             });
         });
-    })
+    });
+
+    describe('parse', () => {
+        before(()=>{
+            const names = [
+                __dirname + '/../tmp/0-' + exampleImage.filename,
+                __dirname + '/../tmp/1-' + exampleImage.filename,
+                __dirname + '/../tmp/2-' + exampleImage.filename,
+                __dirname + '/../tmp/3-' + exampleImage.filename,
+            ];
+            names.forEach((name)=> {
+                try {
+                    fs.lstatSync(name);
+                    return fsp.unlink(name);
+                } catch (e) {
+                }
+            });
+        });
+
+        it('Should recognize images', () => {
+            var data = {
+                test:"tttt",
+                img:JSON.parse(JSON.stringify(exampleImage)),
+                img2:JSON.parse(JSON.stringify(exampleImage)),
+            };
+            var imageSaver = new ImageSaver(data, {images_path:__dirname+'/../tmp/'});
+            return imageSaver.parse().then((value)=>JSON.stringify(value)).should.eventually.be.equal(JSON.stringify({ test: 'tttt', img: '0-test', img2: '1-test' }));
+        });
+
+        it('Should recognize inner images', () => {
+            var data = {
+                test:"tttt",
+                img:JSON.parse(JSON.stringify(exampleImage)),
+                inner:{inner2:{
+                    img:JSON.parse(JSON.stringify(exampleImage)),
+                    img2:JSON.parse(JSON.stringify(exampleImage)),
+                }},
+                img2:JSON.parse(JSON.stringify(exampleImage)),
+            };
+            var imageSaver = new ImageSaver(data, {images_path:__dirname+'/../tmp/'});
+            return imageSaver.parse().then((value)=>JSON.stringify(value)).should.eventually.be.equal(JSON.stringify({"test":"tttt","img":"0-test","inner":{"inner2":{"img":"1-test","img2":"2-test"}},"img2":"3-test"}));
+        });
+
+        it('Should write the image', () => {
+            var data = {
+                test:"tttt",
+                img:JSON.parse(JSON.stringify(exampleImage)),
+                img2:JSON.parse(JSON.stringify(exampleImage)),
+            };
+            var imageSaver = new ImageSaver(data, {images_path:__dirname+'/../tmp/'});
+            return imageSaver.parse().then((value)=>{
+                try{
+                    fs.lstatSync(__dirname+'/../tmp/' +value.img);
+                    fs.lstatSync(__dirname+'/../tmp/' +value.img2);
+                    return 'ok';
+                }catch(e){
+                    return Promise.reject('The file doesn\'t exist ('+e+')');
+                }
+            }).should.eventually.be.equal('ok');
+        });
+    });
 });
-
-
