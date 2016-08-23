@@ -5,6 +5,7 @@
 var Extend = require('extend');
 var Pick = require('object.pick');
 var fs = require('fs');
+var mime = require('mime-types');
 
 module.exports = function(content, options){
     return new ImageSaver(content, options).parse();
@@ -36,21 +37,34 @@ class ImageSaver {
                 filename:'something',
                 filesize:'something',
                 base64:'something'
-            },
-            base64_name: 'any/base64'
-            }
+            }},
+            fields: {},
+            extension_in_name: true
         }, options);
+
+        options.fields = Extend({
+            base64: 'any/base64',
+            mime: 'any/filetype',
+            name: 'any/filename',
+        }, options.fields);
+
+        options.fields = Pick(options.fields, [
+            'base64',
+            'mime',
+            'name'
+        ]);
 
         options = Pick(options, [
             'images_path',
             'base64_structure',
-            'base64_name'
+            'fields',
+            'extension_in_name'
         ]);
 
         return options;
     }
 
-    parse(content = this.content, collection = new ImageCollection(this.options.images_path, this.options.base64_name)) {
+    parse(content = this.content, collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name)) {
         return Object.keys(content).map((value)=>{
             if (this.base64Pattern(value)) {
                 return collection.add(value).path;
@@ -68,7 +82,7 @@ class ImageSaver {
         var structureKeys = Object.keys(structure);
         var objKeys = Object.keys(obj);
         if (structureKeys.length == 1 && structureKeys[0] == 'any' && objKeys.length == 1)
-            return this.base64Pattern(obj[objKeys[0]], structure.any)
+            return this.base64Pattern(obj[objKeys[0]], structure.any);
 
         return structureKeys.every((value)=> (objKeys.indexOf(value) != -1))
             && structureKeys.every((value)=> this.base64Pattern(obj[value], structure[value])); //we already know that the data exists, we have to verify subdata
@@ -77,14 +91,15 @@ class ImageSaver {
 
 class ImageCollection{
 
-    constructor(path, base64Name) {
+    constructor(path, fields, extension_in_name) {
         this.path = path;
-        this.base64Name = base64Name;
+        this.fields = fields;
+        this.extension_in_name = extension_in_name;
         this.images = [];
     }
 
     add(image){
-        var imgObj = new Image(image, this.path +'/'+ this.images.length, this.base64Name); //TODO extension
+        var imgObj = new Image(image, this.path +'/'+ this.images.length, this.fields, this.extension_in_name);
         imgObj.write();
         this.images.push(imgObj);
         return imgObj;
@@ -93,10 +108,13 @@ class ImageCollection{
 
 class Image{
 
-    constructor(image, path, base64Name) {
+    constructor(image, path, fields, extension_in_name) {
         this.image = image;
-        this.path = path;
-        this.base64Name = base64Name;
+        if(extension_in_name)
+            this.path = path + '-' + this.getName().parseForUrl();
+        else
+            this.path = path + '-' + this.getName().parseForUrl() + '.' + this.getExtension();
+        this.fields = fields;
         this.base64 = this.getBase64();
     }
 
@@ -111,14 +129,30 @@ class Image{
         return new Buffer(this.base64, 'base64').toString('utf8');
     }
 
-    getBase64(image = this.image, base64Name = this.base64Name.split('/')){
-        //end
-        if(base64Name.length == 0)
-            return image;
+    getBase64(){
+        return getField(this.fields.base64.split('/'),  this.image);
+    }
 
-        var name = base64Name.pop();
-        if(name == 'any')
-            return this.getBase64(image[Object.keys(image)[0]],base64Name);
-        return this.getBase64(image[name],base64Name);
+    getName(){
+        return getField(this.fields.name.split('/'),  this.image);
+    }
+
+    getExtension(){
+        return mime.extension(getField(this.fields.mime.split('/'),  this.image));
     }
 }
+
+function getField(field, obj){
+    //end
+    if(field.length == 0)
+        return obj;
+
+    var name = field.pop();
+    if(name == 'any')
+        return this.getBase64(field, obj[Object.keys(obj)[0]]);
+    if(typeof obj[name] === 'undefined')
+        throw new Error('Wrong field name');
+    return this.getBase64(field, obj[name]);
+}
+
+String.prototype.parseForUrl = function(){return this.trim().toLocaleLowerCase().replace(new RegExp('( )|(\\\\)|(/)|(\')|(#)', 'g'), '-')};

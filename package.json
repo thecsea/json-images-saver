@@ -23,7 +23,10 @@
   "homepage": "https://github.com/thecsea/json-images-saver#readme",
   "dependencies": {
     "extend": "^3.0.0",
+    "mime-types": "^2.1.11",
     "object.pick": "^1.1.2"
   },
-  "engines" : { "node" : ">=4.2.6"}
+  "engines": {
+    "node": ">=4.2.6"
+  }
 }
