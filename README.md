@@ -1,7 +1,8 @@
 # json-images-saver
 
-Save to files all base64 images contained in the json  
-it can be easily integrated with the output of [static site creator](https://github.com/thecsea/static-site-creator)
+Save to files all base64 images contained in the json
+
+It can be easily integrated with the output of [static site creator](https://github.com/thecsea/static-site-creator)
 
 ## Features
 - [ ] gulp support (with multiple json files support)
