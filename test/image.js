@@ -17,9 +17,9 @@ var imageExample = {
     filetype:"image/jpeg"
 };
 var fields = {
-    base64: 'any/base64',
-    mime: 'any/filetype',
-    name: 'any/filename',
+    base64: 'base64',
+    mime: 'filetype',
+    name: 'filename',
 };
 
 describe('Image', () => {
@@ -34,10 +34,71 @@ describe('Image', () => {
             image.should.have.property('name').equal('1-'+imageExample.filename);
         });
     });
+
     describe('base64', () => {
         it('Should decode base64', () => {
             var image = new Image(imageExample, '1-', '../tmp/', fields, false);
             image.base64Decode().should.be.equal('test');
+        });
+    });
+
+    describe('getField', () => {
+        it('Should support any in the middle', () => {
+            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
+            delete imageExampleCopy.filename;
+            imageExampleCopy.test1 = {test4:{name:'pippo'}};
+            var fieldsCopy = JSON.parse(JSON.stringify(fields));
+            fieldsCopy.name = 'test1/any/name';
+            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            image.getName().should.be.equal('pippo');
+        });
+
+        it('Should support two any', () => {
+            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
+            delete imageExampleCopy.filename;
+            imageExampleCopy.test1 = {test4:{name:'pippo'}};
+            var fieldsCopy = JSON.parse(JSON.stringify(fields));
+            fieldsCopy.name = 'test1/any/any';
+            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            image.getName().should.be.equal('pippo');
+        });
+
+        it('Should support any at the beginning', () => {
+            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
+            delete imageExampleCopy.filename;
+            imageExampleCopy.test1 = {test2:{name:'pippo'}};
+            imageExampleCopy = {test0:imageExampleCopy};
+            var fieldsCopy = JSON.parse(JSON.stringify(fields));
+            fieldsCopy.name = 'any/test1/test2/name';
+            fieldsCopy.filetype = 'any/'+fieldsCopy.filetype;
+            fieldsCopy.mime = 'any/'+fieldsCopy.mime;
+            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            image.getName().should.be.equal('pippo');
+        });
+
+        it('Should support long chain', () => {
+            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
+            delete imageExampleCopy.filename;
+            imageExampleCopy.test1 = {test2:{name:'pippo'}};
+            var fieldsCopy = JSON.parse(JSON.stringify(fields));
+            fieldsCopy.name = 'test1/test2/name';
+            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            image.getName().should.be.equal('pippo');
+        });
+
+        it('Should throw excpetion', () => {
+            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
+            delete imageExampleCopy.filename;
+            imageExampleCopy.test1 = {test4:{name:'pippo'}};
+            var fieldsCopy = JSON.parse(JSON.stringify(fields));
+            fieldsCopy.name = 'test1/test2/name';
+            var thrown  = false;
+            try {
+                var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            }catch(e){
+                thrown = true;
+            }
+            thrown.should.be.equal(true);
         });
     });
 

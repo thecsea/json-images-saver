@@ -31,14 +31,14 @@ module.exports = class Image{
     }
 
     getBase64(){
-        return utils.getField(this.fields.base64.split('/'),  this.image);
+        return utils.getField(this.fields.base64.split('/').reverse(),  this.image);
     }
 
     getName(){
-        return utils.getField(this.fields.name.split('/'),  this.image);
+        return utils.getField(this.fields.name.split('/').reverse(),  this.image);
     }
 
     getExtension(){
-        return mime.extension(utils.getField(this.fields.mime.split('/'),  this.image));
+        return mime.extension(utils.getField(this.fields.mime.split('/').reverse(),  this.image));
     }
 }
