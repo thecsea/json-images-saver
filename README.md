@@ -11,6 +11,5 @@ it can be easily integrated with the output of [static site creator](https://git
 - [ ] *any name* support for multiple keys
 
 ## TODO
-- [ ] unit tests
 - [ ] test wrong cases for base64_structure
 - [ ] travis integration
