@@ -14,7 +14,7 @@ module.exports = class ImageCollection{
     }
 
     add(image){
-        var imgObj = new Image(image, this.path +'/'+ this.images.length, this.fields, this.extension_in_name);
+        var imgObj = new Image(image, this.path +'/'+ this.images.length + '-', this.fields, this.extension_in_name);
         imgObj.write();
         this.images.push(imgObj);
         return imgObj;
