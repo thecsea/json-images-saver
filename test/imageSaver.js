@@ -120,6 +120,12 @@ describe('Image Saver', () => {
             imageSaver.base64Pattern(data.test1.test2.img).should.be.equal(true);
         });
 
+        it('Should recognize root pattern', () => {
+            var data = JSON.parse(JSON.stringify(exampleImage));
+            var imageSaver = new ImageSaver(data);
+            imageSaver.base64Pattern(data).should.be.equal(true);
+        });
+
         describe('any', () => {
             it('Should recognize any in the middle', () => {
                 var img = JSON.parse(JSON.stringify(exampleImage));
