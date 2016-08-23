@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/thecsea/json-images-saver/issues"
   },
-  "homepage": "https://github.com/thecsea/json-images-saver#readme"
+  "homepage": "https://github.com/thecsea/json-images-saver#readme",
+  "dependencies": {
+    "extend": "^3.0.0",
+    "object.pick": "^1.1.2"
+  },
+  "engines" : { "node" : ">=4.2.6"}
 }
