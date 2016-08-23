@@ -10,7 +10,7 @@ var fs = require('fs');
 
 chai.should();
 
-var imageExample = {
+var exampleImage = {
     base64:"dGVzdA==", //='test'
     filename:"test",
     filesize:"111",
@@ -25,76 +25,76 @@ var fields = {
 describe('Image', () => {
     describe('new', () => {
         it('Should have extension', () => {
-            var image = new Image(imageExample, '1-', '../tmp/', fields, false);
-            image.should.have.property('name').equal('1-'+imageExample.filename+'.'+'jpeg');
+            var image = new Image(exampleImage, '1-', '../tmp/', fields, false);
+            image.should.have.property('name').equal('1-'+exampleImage.filename+'.'+'jpeg');
         });
 
         it('Should not have extension', () => {
-            var image = new Image(imageExample, '1-', '../tmp/', fields, true);
-            image.should.have.property('name').equal('1-'+imageExample.filename);
+            var image = new Image(exampleImage, '1-', '../tmp/', fields, true);
+            image.should.have.property('name').equal('1-'+exampleImage.filename);
         });
     });
 
     describe('base64', () => {
         it('Should decode base64', () => {
-            var image = new Image(imageExample, '1-', '../tmp/', fields, false);
+            var image = new Image(exampleImage, '1-', '../tmp/', fields, false);
             image.base64Decode().should.be.equal('test');
         });
     });
 
     describe('getField', () => {
         it('Should support any in the middle', () => {
-            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
-            delete imageExampleCopy.filename;
-            imageExampleCopy.test1 = {test4:{name:'pippo'}};
+            var exampleImageCopy = JSON.parse(JSON.stringify(exampleImage));
+            delete exampleImageCopy.filename;
+            exampleImageCopy.test1 = {test4:{name:'pippo'}};
             var fieldsCopy = JSON.parse(JSON.stringify(fields));
             fieldsCopy.name = 'test1/any/name';
-            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            var image = new Image(exampleImageCopy, '1-', '../tmp/', fieldsCopy, false);
             image.getName().should.be.equal('pippo');
         });
 
         it('Should support two any', () => {
-            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
-            delete imageExampleCopy.filename;
-            imageExampleCopy.test1 = {test4:{name:'pippo'}};
+            var exampleImageCopy = JSON.parse(JSON.stringify(exampleImage));
+            delete exampleImageCopy.filename;
+            exampleImageCopy.test1 = {test4:{name:'pippo'}};
             var fieldsCopy = JSON.parse(JSON.stringify(fields));
             fieldsCopy.name = 'test1/any/any';
-            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            var image = new Image(exampleImageCopy, '1-', '../tmp/', fieldsCopy, false);
             image.getName().should.be.equal('pippo');
         });
 
         it('Should support any at the beginning', () => {
-            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
-            delete imageExampleCopy.filename;
-            imageExampleCopy.test1 = {test2:{name:'pippo'}};
-            imageExampleCopy = {test0:imageExampleCopy};
+            var exampleImageCopy = JSON.parse(JSON.stringify(exampleImage));
+            delete exampleImageCopy.filename;
+            exampleImageCopy.test1 = {test2:{name:'pippo'}};
+            exampleImageCopy = {test0:exampleImageCopy};
             var fieldsCopy = JSON.parse(JSON.stringify(fields));
             fieldsCopy.name = 'any/test1/test2/name';
             fieldsCopy.filetype = 'any/'+fieldsCopy.filetype;
             fieldsCopy.mime = 'any/'+fieldsCopy.mime;
-            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            var image = new Image(exampleImageCopy, '1-', '../tmp/', fieldsCopy, false);
             image.getName().should.be.equal('pippo');
         });
 
         it('Should support long chain', () => {
-            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
-            delete imageExampleCopy.filename;
-            imageExampleCopy.test1 = {test2:{name:'pippo'}};
+            var exampleImageCopy = JSON.parse(JSON.stringify(exampleImage));
+            delete exampleImageCopy.filename;
+            exampleImageCopy.test1 = {test2:{name:'pippo'}};
             var fieldsCopy = JSON.parse(JSON.stringify(fields));
             fieldsCopy.name = 'test1/test2/name';
-            var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+            var image = new Image(exampleImageCopy, '1-', '../tmp/', fieldsCopy, false);
             image.getName().should.be.equal('pippo');
         });
 
         it('Should throw excpetion', () => {
-            var imageExampleCopy = JSON.parse(JSON.stringify(imageExample));
-            delete imageExampleCopy.filename;
-            imageExampleCopy.test1 = {test4:{name:'pippo'}};
+            var exampleImageCopy = JSON.parse(JSON.stringify(exampleImage));
+            delete exampleImageCopy.filename;
+            exampleImageCopy.test1 = {test4:{name:'pippo'}};
             var fieldsCopy = JSON.parse(JSON.stringify(fields));
             fieldsCopy.name = 'test1/test2/name';
             var thrown  = false;
             try {
-                var image = new Image(imageExampleCopy, '1-', '../tmp/', fieldsCopy, false);
+                var image = new Image(exampleImageCopy, '1-', '../tmp/', fieldsCopy, false);
             }catch(e){
                 thrown = true;
             }
@@ -104,7 +104,7 @@ describe('Image', () => {
 
     describe('write', () => {
         before(()=>{
-            const name = __dirname + '/../tmp/1-' + imageExample.filename;
+            const name = __dirname + '/../tmp/1-' + exampleImage.filename;
             try {
                 fs.lstatSync(name);
                 return fsp.unlink(name);
@@ -112,11 +112,11 @@ describe('Image', () => {
         });
 
         it('Should write the image', () => {
-            var image = new Image(imageExample, '1-', __dirname + '/../tmp/', fields, true);
+            var image = new Image(exampleImage, '1-', __dirname + '/../tmp/', fields, true);
             return image.write()
                 .then(()=>{
                     try{
-                        fs.lstatSync(image.path + '1-'+imageExample.filename );
+                        fs.lstatSync(image.path + '1-'+exampleImage.filename );
                         return 'ok';
                     }catch(e){
                         return Promise.reject('The file doesn\'t exist ('+e+')');
@@ -126,16 +126,16 @@ describe('Image', () => {
         });
 
         it('Should write the right content', () => {
-            var image = new Image(imageExample, '1-', __dirname + '/../tmp/', fields, true);
+            var image = new Image(exampleImage, '1-', __dirname + '/../tmp/', fields, true);
             return image.write()
                 .then(()=>{
-                    return fsp.readFile(image.path + '1-'+imageExample.filename ,'utf-8')
+                    return fsp.readFile(image.path + '1-'+exampleImage.filename ,'utf-8')
                 })
                 .should.eventually.equal('test');
         });
 
         it('Should throw error', () => {
-            var image = new Image(imageExample, '1-', __dirname + '/../tmperr/', fields, true);
+            var image = new Image(exampleImage, '1-', __dirname + '/../tmperr/', fields, true);
             return image.write()
                 .catch((err)=>{
                     return 'ok-err';

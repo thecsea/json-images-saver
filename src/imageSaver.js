@@ -66,12 +66,13 @@ module.exports = class ImageSaver {
         if(typeof collection === 'undefined')
             collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name);
 
-        return Object.keys(content).map((value)=>{
+        return content.forEach((value, key)=>{
             if (this.base64Pattern(value)) {
-                return collection.add(value).name;
+                collection.add(value)
+                    .then((image)=>{content[key] = name});
             }
-            if(typeof value === 'object')
-                return this.parse(value, collection);
+            else if(typeof value === 'object')
+                content[key] = this.parse(value, collection);
         })
     }
 

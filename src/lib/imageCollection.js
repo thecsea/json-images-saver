@@ -14,9 +14,11 @@ module.exports = class ImageCollection{
     }
 
     add(image){
-        var imgObj = new Image(image, this.path +'/', this.images.length + '-', this.fields, this.extension_in_name);
-        imgObj.write();
+        var imgObj = new Image(image, this.images.length + '-', this.path, this.fields, this.extension_in_name);
+        var promise = imgObj.write();
         this.images.push(imgObj);
-        return imgObj;
+        return promise.then(()=>{
+            return imgObj;
+        });
     }
 }
