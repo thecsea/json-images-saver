@@ -4,9 +4,7 @@
 "use strict";
 var Extend = require('extend');
 var Pick = require('object.pick');
-var Collection = require('./lib/imageCollection');
-
-
+var ImageCollection = require('./lib/imageCollection');
 
 module.exports = class ImageSaver {
     constructor(content, options){
@@ -28,20 +26,20 @@ module.exports = class ImageSaver {
 
         options = Extend({
             images_path: 'public/images',
-            base64_structure: {any:{
+            base64_structure: {
                 filetype:'something',
                 filename:'something',
                 filesize:'something',
                 base64:'something'
-            }},
+            },
             fields: {},
             extension_in_name: true
         }, options);
 
         options.fields = Extend({
-            base64: 'any/base64',
-            mime: 'any/filetype',
-            name: 'any/filename',
+            base64: 'base64',
+            mime: 'filetype',
+            name: 'filename',
         }, options.fields);
 
         options.fields = Pick(options.fields, [
@@ -78,6 +76,9 @@ module.exports = class ImageSaver {
 
 
     base64Pattern(obj, structure) {
+        if(typeof obj === 'undefined')
+            return false;
+
         if(typeof structure === 'undefined')
             structure = this.options.base64_structure;
 
