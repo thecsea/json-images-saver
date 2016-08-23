@@ -19,7 +19,7 @@ module.exports = class Image{
     write(){
         return fsp.writeFile(this.path + this.name , this.base64Decode())
             .then(()=>{
-                console.log(this.name +' saved!');
+                //console.info(this.name +' saved!');
             })
             .catch((err)=>{
                 throw err;

@@ -10,7 +10,7 @@ var ImageSaver = require('../src/imageSaver');
 chai.should();
 
 
-describe('Image saver', () => {
+describe('Image Saver', () => {
     describe('new', () => {
         it('Should parse content', () => {
             var imageSaver = new ImageSaver('{"pippo":"test"}');

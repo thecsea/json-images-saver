@@ -62,7 +62,7 @@ describe('Image', () => {
                     }
                 })
                 .should.eventually.equal('ok');
-        })
+        });
 
         it('Should write the right content', () => {
             var image = new Image(imageExample, '1-', __dirname + '/../tmp/', fields, true);
