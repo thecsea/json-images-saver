@@ -4,7 +4,7 @@
 "use strict";
 var utils = require('./utils');
 var mime = require('mime-types');
-var fs = require('fs');
+var fsp = require('fs-promise');
 
 module.exports = class Image{
     constructor(image, name, path, fields, extension_in_name) {
@@ -14,18 +14,20 @@ module.exports = class Image{
         this.name = name + this.getName().parseForUrl();
         if(!extension_in_name)
             this.name += '.' + this.getExtension();
-        this.base64 = this.getBase64();
     }
 
     write(){
-        fs.writeFile(this.path, this.base64Decode(), (err) => {
-            if (err) throw err;
-            console.log(this.path +' saved!');
-        });
+        return fsp.writeFile(this.path + this.name , this.base64Decode())
+            .then(()=>{
+                console.log(this.name +' saved!');
+            })
+            .catch((err)=>{
+                throw err;
+            });
     }
 
     base64Decode(){
-        return new Buffer(this.base64, 'base64').toString('utf8');
+        return new Buffer(this.getBase64(), 'base64').toString('utf8');
     }
 
     getBase64(){
