@@ -4,7 +4,7 @@
   "description": "Save to files all base64 images contained in the json",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover _mocha --  -u exports -R spec --recursive -- test/**/*.js"
+    "test": "istanbul test _mocha --  -u exports -R spec --recursive -- test/**/*.js"
   },
   "repository": {
     "type": "git",
