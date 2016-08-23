@@ -21,13 +21,13 @@ var fields = {
 describe('Image', () => {
     describe('new', () => {
         it('Should have extension', () => {
-            var image = new Image(imageExample, '../tmp/', fields, false);
-            image.should.have.property('path').equal('../tmp/'+imageExample.filename+'.'+'jpeg');
+            var image = new Image(imageExample, '1-', '../tmp/', fields, false);
+            image.should.have.property('name').equal('1-'+imageExample.filename+'.'+'jpeg');
         });
 
         it('Should not have extension', () => {
-            var image = new Image(imageExample, '../tmp/', fields, true);
-            image.should.have.property('path').equal('../tmp/'+imageExample.filename);
+            var image = new Image(imageExample, '1-', '../tmp/', fields, true);
+            image.should.have.property('name').equal('1-'+imageExample.filename);
         });
     });
 });

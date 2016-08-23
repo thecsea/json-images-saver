@@ -7,12 +7,13 @@ var mime = require('mime-types');
 var fs = require('fs');
 
 module.exports = class Image{
-    constructor(image, path, fields, extension_in_name) {
+    constructor(image, name, path, fields, extension_in_name) {
         this.image = image;
         this.fields = fields;
-        this.path = path + this.getName().parseForUrl();
+        this.path = path;
+        this.name = name + this.getName().parseForUrl();
         if(!extension_in_name)
-            this.path += '.' + this.getExtension();
+            this.name += '.' + this.getExtension();
         this.base64 = this.getBase64();
     }
 

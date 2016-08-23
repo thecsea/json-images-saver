@@ -68,7 +68,7 @@ module.exports = class ImageSaver {
 
         return Object.keys(content).map((value)=>{
             if (this.base64Pattern(value)) {
-                return collection.add(value).path;
+                return collection.add(value).name;
             }
             if(typeof value === 'object')
                 return this.parse(value, collection);
