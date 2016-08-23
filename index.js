@@ -4,6 +4,7 @@
 "use strict";
 var Extend = require('extend');
 var Pick = require('object.pick');
+var fs = require('fs');
 
 module.exports = function(content, options){
     return new ImageSaver(content, options).parse();
@@ -12,7 +13,7 @@ module.exports = function(content, options){
 
 class ImageSaver {
     constructor(content, options){
-        this.options = imageSaver.validateOptions(options);
+        this.options = ImageSaver.validateOptions(options);
         if(typeof content === 'string') {
             try {
                 content = JSON.parse(content)
@@ -36,7 +37,7 @@ class ImageSaver {
                 filesize:'something',
                 base64:'something'
             },
-            base64_name: 'base64'
+            base64_name: 'any/base64'
             }
         }, options);
 
@@ -49,10 +50,10 @@ class ImageSaver {
         return options;
     }
 
-    parse(content = this.content, collection = new ImageCollection(this.options.images_path)) {
+    parse(content = this.content, collection = new ImageCollection(this.options.images_path, this.options.base64_name)) {
         return Object.keys(content).map((value)=>{
             if (this.base64Pattern(value)) {
-                return ImageCollection.add(value).path;
+                return collection.add(value).path;
             }
             if(typeof value === 'object')
                 return this.parse(value, collection);
@@ -76,13 +77,14 @@ class ImageSaver {
 
 class ImageCollection{
 
-    constructor(path) {
+    constructor(path, base64Name) {
         this.path = path;
+        this.base64Name = base64Name;
         this.images = [];
     }
 
     add(image){
-        var imgObj = new Image(image, this.path +'/'+ this.images.length); //TODO extension
+        var imgObj = new Image(image, this.path +'/'+ this.images.length, this.base64Name); //TODO extension
         imgObj.write();
         this.images.push(imgObj);
         return imgObj;
@@ -91,12 +93,32 @@ class ImageCollection{
 
 class Image{
 
-    constructor(image, path) {
+    constructor(image, path, base64Name) {
         this.image = image;
         this.path = path;
+        this.base64Name = base64Name;
+        this.base64 = this.getBase64();
     }
 
     write(){
+        fs.writeFile(this.path, this.base64Decode(), (err) => {
+            if (err) throw err;
+            console.log(this.path +' saved!');
+        });
+    }
 
+    base64Decode(){
+        return new Buffer(this.base64, 'base64').toString('utf8');
+    }
+
+    getBase64(image = this.image, base64Name = this.base64Name.split('/')){
+        //end
+        if(base64Name.length == 0)
+            return image;
+
+        var name = base64Name.pop();
+        if(name == 'any')
+            return this.getBase64(image[Object.keys(image)[0]],base64Name);
+        return this.getBase64(image[name],base64Name);
     }
 }
