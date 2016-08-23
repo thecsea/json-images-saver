@@ -64,7 +64,12 @@ class ImageSaver {
         return options;
     }
 
-    parse(content = this.content, collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name)) {
+    parse(content, collection) {
+        if(typeof content === 'undefined')
+            content = this.content;
+        if(typeof collection === 'undefined')
+            collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name);
+
         return Object.keys(content).map((value)=>{
             if (this.base64Pattern(value)) {
                 return collection.add(value).path;
@@ -75,7 +80,10 @@ class ImageSaver {
     }
 
 
-    base64Pattern(obj, structure = this.options.base64_structure) {
+    base64Pattern(obj, structure) {
+        if(typeof structure === 'undefined')
+            structure = this.options.base64_structure;
+
         if(typeof obj !== 'object')
             return true;
 

@@ -14,3 +14,4 @@ it can be easily integrated with the output of [static site creator](https://git
 - [ ] unit tests
 - [ ] test wrong cases for base64_structure
 - [ ] Image as root support
+- [ ] travis integration

@@ -4,7 +4,7 @@
   "description": "Save to files all base64 images contained in the json",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover _mocha --  -u exports -R spec --recursive -- test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,17 @@
   },
   "homepage": "https://github.com/thecsea/json-images-saver#readme",
   "dependencies": {
+    "chai": "^3.5.0",
     "extend": "^3.0.0",
     "mime-types": "^2.1.11",
     "object.pick": "^1.1.2"
   },
   "engines": {
     "node": ">=4.2.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2"
   }
 }

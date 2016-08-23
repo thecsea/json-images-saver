@@ -101,3 +101,6 @@ Temporary Items
 ### NPM ###
 node_modules/
 npm-debug.log
+
+### TESTS ###
+coverage
