@@ -7,19 +7,19 @@ var Gulp = require('gulp');
 var Print = require('gulp-print');
 var Plumber = require('gulp-plumber');
 
-var imageSaver = require('./gulp');
+var imagesSaver = require('./gulp');
 
 var Task = Elixir.Task;
 
-Elixir.extend('jsonImageSaver', function (src, pipe, options)
+Elixir.extend('jsonImagesSaver', function (src, pipe, options)
 {
-    new Task('jsonImageSaver', function ()
+    new Task('jsonImagesSaver', function ()
     {
         return Gulp
             .src(src)
             .pipe(Print())
             .pipe(Plumber())
-            .pipe(imageSaver(options))
+            .pipe(imagesSaver(options))
             .pipe(pipe)
             .pipe(Print());
     }).watch(src);

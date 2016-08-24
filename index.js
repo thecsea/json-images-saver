@@ -1,7 +1,7 @@
 /**
  * Created by claudio on 23/08/16.
  */
-var ImageSaver = require('./src/imageSaver');
+var ImagesSaver = require('./src/imagesSaver');
 
 /**
  *
@@ -10,5 +10,5 @@ var ImageSaver = require('./src/imageSaver');
  * @returns Promise
  */
 module.exports = function(content, options){
-    return new ImageSaver(content, options).parse();
+    return new ImagesSaver(content, options).parse();
 }

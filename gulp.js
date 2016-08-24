@@ -6,15 +6,15 @@
 var through = require('through2');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
-var jsonImageSaver = require('./index');
+var jsonImagesSaver = require('./index');
 var StreamFromPromise = require('stream-from-promise');
 var vinylBuffer = require('vinyl-buffer');
 
 // Consts
-const PLUGIN_NAME = 'json-image-saver';
+const PLUGIN_NAME = 'json-images-saver';
 
 // Plugin level function(dealing with files)
-function gulpJsonImageSaver(options) {
+function gulpJsonImagesSaver(options) {
 
     /*if (!options) {
         throw new PluginError(PLUGIN_NAME, 'Missing options!');
@@ -29,7 +29,7 @@ function gulpJsonImageSaver(options) {
         if (file.isBuffer()) {
              //TODO try catch
             try {
-                var data = jsonImageSaver(file.contents.toString('utf-8'), options);
+                var data = jsonImagesSaver(file.contents.toString('utf-8'), options);
             }catch(err){
                 cb(new PluginError(PLUGIN_NAME, err));
                 return ;
@@ -52,4 +52,4 @@ function gulpJsonImageSaver(options) {
 }
 
 // Exporting the plugin main function
-module.exports = gulpJsonImageSaver;
+module.exports = gulpJsonImagesSaver;

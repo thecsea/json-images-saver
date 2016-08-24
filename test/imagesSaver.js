@@ -2,7 +2,7 @@
  * Created by claudio on 23/08/16.
  */
 var chai = require('chai');
-var ImageSaver = require('../src/imageSaver');
+var ImagesSaver = require('../src/imagesSaver');
 var fs = require('fs');
 //var assert = chai.assert;
 
@@ -27,22 +27,22 @@ describe('Image Saver', () => {
     describe('new', () => {
         describe('content', () => {
             it('Should parse content', () => {
-                var imageSaver = new ImageSaver('{"pippo":"test"}');
-                imageSaver.should.have.property('content');
-                imageSaver.content.should.have.property('pippo').equal('test');
+                var imagesSaver = new ImagesSaver('{"pippo":"test"}');
+                imagesSaver.should.have.property('content');
+                imagesSaver.content.should.have.property('pippo').equal('test');
             });
 
             it('Should not parse content', () => {
-                var imageSaver = new ImageSaver({"pippo": "test"});
-                imageSaver.should.have.property('content');
-                imageSaver.content.should.have.property('pippo').equal('test');
+                var imagesSaver = new ImagesSaver({"pippo": "test"});
+                imagesSaver.should.have.property('content');
+                imagesSaver.content.should.have.property('pippo').equal('test');
             });
         });
 
         describe('options', () => {
             it('Should insert default options', () => {
-                var imageSaver = new ImageSaver('{"pippo":"test"}');
-                JSON.stringify(imageSaver.options).should.be.equal(JSON.stringify({
+                var imagesSaver = new ImagesSaver('{"pippo":"test"}');
+                JSON.stringify(imagesSaver.options).should.be.equal(JSON.stringify({
                     images_path: 'public/images/',
                     base64_structure: {
                         filetype: 'something',
@@ -60,13 +60,13 @@ describe('Image Saver', () => {
             });
 
             it('Should remove wrong options', () => {
-                var imageSaver = new ImageSaver('{"pippo":"test"}', {pippo:"test"});
-                imageSaver.options.should.not.have.property('pippo');
+                var imagesSaver = new ImagesSaver('{"pippo":"test"}', {pippo:"test"});
+                imagesSaver.options.should.not.have.property('pippo');
             });
 
             it('Should insert custom options', () => {
-                var imageSaver = new ImageSaver('{"pippo":"test"}', {fields: {base64:"test"}});
-                JSON.stringify(imageSaver.options.fields).should.equal(JSON.stringify({base64: 'test',
+                var imagesSaver = new ImagesSaver('{"pippo":"test"}', {fields: {base64:"test"}});
+                JSON.stringify(imagesSaver.options.fields).should.equal(JSON.stringify({base64: 'test',
                     mime: 'filetype',
                     name: 'filename'}));
             });
@@ -79,11 +79,11 @@ describe('Image Saver', () => {
                 test:"tttt",
                 img:JSON.parse(JSON.stringify(exampleImage))
             };
-            var imageSaver = new ImageSaver(data);
-            imageSaver.base64Pattern().should.be.equal(false); //empty object
-            imageSaver.base64Pattern(data.test).should.be.equal(false); //wrong element
-            imageSaver.base64Pattern(data).should.be.equal(false);
-            imageSaver.base64Pattern(data.img).should.be.equal(true);
+            var imagesSaver = new ImagesSaver(data);
+            imagesSaver.base64Pattern().should.be.equal(false); //empty object
+            imagesSaver.base64Pattern(data.test).should.be.equal(false); //wrong element
+            imagesSaver.base64Pattern(data).should.be.equal(false);
+            imagesSaver.base64Pattern(data.img).should.be.equal(true);
         });
 
         it('Should recognize complex pattern', () => {
@@ -94,9 +94,9 @@ describe('Image Saver', () => {
                 img: img,
             };
             //structure not changed
-            var imageSaver = new ImageSaver(data);
-            imageSaver.base64Pattern(data).should.be.equal(false);
-            imageSaver.base64Pattern(data.img).should.be.equal(false);
+            var imagesSaver = new ImagesSaver(data);
+            imagesSaver.base64Pattern(data).should.be.equal(false);
+            imagesSaver.base64Pattern(data.img).should.be.equal(false);
 
             //structure changed
             var options = {base64_structure: {test1: {test2:{
@@ -105,9 +105,9 @@ describe('Image Saver', () => {
                 filesize: 'something',
                 base64: 'something'
             }}}};
-            var imageSaver = new ImageSaver(data, options);
-            imageSaver.base64Pattern(data).should.be.equal(false);
-            imageSaver.base64Pattern(data.img).should.be.equal(true);
+            var imagesSaver = new ImagesSaver(data, options);
+            imagesSaver.base64Pattern(data).should.be.equal(false);
+            imagesSaver.base64Pattern(data.img).should.be.equal(true);
         });
 
         it('Should recognize inner image', () => {
@@ -115,15 +115,15 @@ describe('Image Saver', () => {
                 test:"tttt",
                 test1:{test2:{img:JSON.parse(JSON.stringify(exampleImage))}}
             }
-            var imageSaver = new ImageSaver(data);
-            imageSaver.base64Pattern(data).should.be.equal(false);
-            imageSaver.base64Pattern(data.test1.test2.img).should.be.equal(true);
+            var imagesSaver = new ImagesSaver(data);
+            imagesSaver.base64Pattern(data).should.be.equal(false);
+            imagesSaver.base64Pattern(data.test1.test2.img).should.be.equal(true);
         });
 
         it('Should recognize root pattern', () => {
             var data = JSON.parse(JSON.stringify(exampleImage));
-            var imageSaver = new ImageSaver(data);
-            imageSaver.base64Pattern(data).should.be.equal(true);
+            var imagesSaver = new ImagesSaver(data);
+            imagesSaver.base64Pattern(data).should.be.equal(true);
         });
 
         describe('any', () => {
@@ -135,9 +135,9 @@ describe('Image Saver', () => {
                     img: img,
                 };
                 //structure not changed
-                var imageSaver = new ImageSaver(data);
-                imageSaver.base64Pattern(data).should.be.equal(false);
-                imageSaver.base64Pattern(data.img).should.be.equal(false);
+                var imagesSaver = new ImagesSaver(data);
+                imagesSaver.base64Pattern(data).should.be.equal(false);
+                imagesSaver.base64Pattern(data.img).should.be.equal(false);
 
                 //structure changed
                 var options = {base64_structure: {test1: {any:{
@@ -146,9 +146,9 @@ describe('Image Saver', () => {
                     filesize: 'something',
                     base64: 'something'
                 }}}};
-                var imageSaver = new ImageSaver(data, options);
-                imageSaver.base64Pattern(data).should.be.equal(false);
-                imageSaver.base64Pattern(data.img).should.be.equal(true);
+                var imagesSaver = new ImagesSaver(data, options);
+                imagesSaver.base64Pattern(data).should.be.equal(false);
+                imagesSaver.base64Pattern(data.img).should.be.equal(true);
             });
 
             it('Should recognize any at the beginning', () => {
@@ -159,9 +159,9 @@ describe('Image Saver', () => {
                     img: img,
                 };
                 //structure not changed
-                var imageSaver = new ImageSaver(data);
-                imageSaver.base64Pattern(data).should.be.equal(false);
-                imageSaver.base64Pattern(data.img).should.be.equal(false);
+                var imagesSaver = new ImagesSaver(data);
+                imagesSaver.base64Pattern(data).should.be.equal(false);
+                imagesSaver.base64Pattern(data.img).should.be.equal(false);
 
                 //structure changed
                 var options = {base64_structure: {any: {test4:{
@@ -170,9 +170,9 @@ describe('Image Saver', () => {
                     filesize: 'something',
                     base64: 'something'
                 }}}};
-                var imageSaver = new ImageSaver(data, options);
-                imageSaver.base64Pattern(data).should.be.equal(false);
-                imageSaver.base64Pattern(data.img).should.be.equal(true);
+                var imagesSaver = new ImagesSaver(data, options);
+                imagesSaver.base64Pattern(data).should.be.equal(false);
+                imagesSaver.base64Pattern(data.img).should.be.equal(true);
             });
 
             it('Should recognize two any', () => {
@@ -183,9 +183,9 @@ describe('Image Saver', () => {
                     img: img,
                 };
                 //structure not changed
-                var imageSaver = new ImageSaver(data);
-                imageSaver.base64Pattern(data).should.be.equal(false);
-                imageSaver.base64Pattern(data.img).should.be.equal(false);
+                var imagesSaver = new ImagesSaver(data);
+                imagesSaver.base64Pattern(data).should.be.equal(false);
+                imagesSaver.base64Pattern(data.img).should.be.equal(false);
 
                 //structure changed
                 var options = {base64_structure: {any: {any:{
@@ -194,9 +194,9 @@ describe('Image Saver', () => {
                     filesize: 'something',
                     base64: 'something'
                 }}}};
-                var imageSaver = new ImageSaver(data, options);
-                imageSaver.base64Pattern(data).should.be.equal(false);
-                imageSaver.base64Pattern(data.img).should.be.equal(true);
+                var imagesSaver = new ImagesSaver(data, options);
+                imagesSaver.base64Pattern(data).should.be.equal(false);
+                imagesSaver.base64Pattern(data.img).should.be.equal(true);
             });
         });
     });
@@ -224,8 +224,8 @@ describe('Image Saver', () => {
                 img:JSON.parse(JSON.stringify(exampleImage)),
                 img2:JSON.parse(JSON.stringify(exampleImage)),
             };
-            var imageSaver = new ImageSaver(data, {images_path:__dirname+'/../tmp/'});
-            return imageSaver.parse().then((value)=>JSON.stringify(value)).should.eventually.be.equal(JSON.stringify({ test: 'tttt', img: '0-test', img2: '1-test' }));
+            var imagesSaver = new ImagesSaver(data, {images_path:__dirname+'/../tmp/'});
+            return imagesSaver.parse().then((value)=>JSON.stringify(value)).should.eventually.be.equal(JSON.stringify({ test: 'tttt', img: '0-test', img2: '1-test' }));
         });
 
         it('Should recognize inner images', () => {
@@ -238,8 +238,8 @@ describe('Image Saver', () => {
                 }},
                 img2:JSON.parse(JSON.stringify(exampleImage)),
             };
-            var imageSaver = new ImageSaver(data, {images_path:__dirname+'/../tmp/'});
-            return imageSaver.parse().then((value)=>JSON.stringify(value)).should.eventually.be.equal(JSON.stringify({"test":"tttt","img":"0-test","inner":{"inner2":{"img":"1-test","img2":"2-test"}},"img2":"3-test"}));
+            var imagesSaver = new ImagesSaver(data, {images_path:__dirname+'/../tmp/'});
+            return imagesSaver.parse().then((value)=>JSON.stringify(value)).should.eventually.be.equal(JSON.stringify({"test":"tttt","img":"0-test","inner":{"inner2":{"img":"1-test","img2":"2-test"}},"img2":"3-test"}));
         });
 
         it('Should write the image', () => {
@@ -248,8 +248,8 @@ describe('Image Saver', () => {
                 img:JSON.parse(JSON.stringify(exampleImage)),
                 img2:JSON.parse(JSON.stringify(exampleImage)),
             };
-            var imageSaver = new ImageSaver(data, {images_path:__dirname+'/../tmp/'});
-            return imageSaver.parse().then((value)=>{
+            var imagesSaver = new ImagesSaver(data, {images_path:__dirname+'/../tmp/'});
+            return imagesSaver.parse().then((value)=>{
                 try{
                     fs.lstatSync(__dirname+'/../tmp/' +value.img);
                     fs.lstatSync(__dirname+'/../tmp/' +value.img2);

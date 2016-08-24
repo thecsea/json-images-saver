@@ -6,9 +6,9 @@ var Extend = require('extend');
 var Pick = require('object.pick');
 var ImageCollection = require('./lib/imageCollection');
 
-module.exports = class ImageSaver {
+module.exports = class ImagesSaver {
     constructor(content, options){
-        this.options = ImageSaver.validateOptions(options);
+        this.options = ImagesSaver.validateOptions(options);
         if(typeof content === 'string') {
             try {
                 content = JSON.parse(content)
