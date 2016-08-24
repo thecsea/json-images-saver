@@ -27,7 +27,7 @@ module.exports = class Image{
     }
 
     base64Decode(){
-        return new Buffer(this.getBase64(), 'base64').toString('utf8');
+        return new Buffer(this.getBase64(), 'base64');
     }
 
     getBase64(){

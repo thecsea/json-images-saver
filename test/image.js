@@ -38,7 +38,7 @@ describe('Image', () => {
     describe('base64', () => {
         it('Should decode base64', () => {
             var image = new Image(exampleImage, '1-', '../tmp/', fields, false);
-            image.base64Decode().should.be.equal('test');
+            image.base64Decode().toString('utf8').should.be.equal('test');
         });
     });
 
