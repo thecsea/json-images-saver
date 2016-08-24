@@ -1,6 +1,6 @@
 {
   "name": "json-images-saver",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Save to files all base64 images contained in the json",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,8 @@
   "keywords": [
     "json",
     "base64",
-    "images"
+    "images",
+    "gulp"
   ],
   "author": "Claudio Cardinale",
   "license": "GPL-3.0",
@@ -22,11 +23,13 @@
   },
   "homepage": "https://github.com/thecsea/json-images-saver#readme",
   "dependencies": {
-    "chai": "^3.5.0",
     "extend": "^3.0.0",
     "fs-promise": "^0.5.0",
+    "gulp": "^3.9.1",
     "mime-types": "^2.1.11",
-    "object.pick": "^1.1.2"
+    "object.pick": "^1.1.2",
+    "stream-from-promise": "^1.0.0",
+    "vinyl-buffer": "^1.0.0"
   },
   "engines": {
     "node": ">=4.2.6"
