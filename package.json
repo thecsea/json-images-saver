@@ -14,7 +14,8 @@
     "json",
     "base64",
     "images",
-    "gulp"
+    "gulp",
+    "elixir"
   ],
   "author": "Claudio Cardinale",
   "license": "GPL-3.0",
@@ -26,6 +27,9 @@
     "extend": "^3.0.0",
     "fs-promise": "^0.5.0",
     "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-print": "^2.0.1",
+    "laravel-elixir": "^6.0.0-10",
     "mime-types": "^2.1.11",
     "object.pick": "^1.1.2",
     "stream-from-promise": "^1.0.0",
