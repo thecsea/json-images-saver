@@ -3,12 +3,12 @@
  */
 "use strict";
 // through2 is a thin wrapper around node transform streams
-var through = require('through2');
-var gutil = require('gulp-util');
+var through = require('../through2');
+var gutil = require('../gulp-util');
 var PluginError = gutil.PluginError;
 var jsonImagesSaver = require('./index');
-var StreamFromPromise = require('stream-from-promise');
-var vinylBuffer = require('vinyl-buffer');
+var StreamFromPromise = require('../stream-from-promise');
+var vinylBuffer = require('../vinyl-buffer');
 
 // Consts
 const PLUGIN_NAME = 'json-images-saver';
