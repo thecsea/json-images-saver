@@ -17,3 +17,4 @@ It can be easily integrated with the output of [static site creator](https://git
 - [ ] test wrong cases for base64_structure
 - [ ] travis integration
 - [ ] elixir notify
+- [ ] delete old images
