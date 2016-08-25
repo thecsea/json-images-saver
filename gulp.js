@@ -39,7 +39,8 @@ function gulpJsonImagesSaver(fileExtension, options) {
             let name = file.path.split('/'); //TODO checks
             name = name[name.length-1];
             optionsCopy.images_path = optionsCopy.images_path + name.substr(0,name.length-(fileExtension.length+1)) + '/'; //+1 of .
-            return fsp.mkdir(optionsCopy.images_path)
+            return fsp.stat(optionsCopy.images_path)
+                .catch(()=>fsp.mkdir(optionsCopy.images_path))
                 .then(()=>jsonImagesSaver(file.contents.toString('utf-8'), optionsCopy))
                 .then((value)=> {
                     file.contents = new Buffer(JSON.stringify(value));
