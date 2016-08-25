@@ -11,7 +11,7 @@ var imagesSaver = require('./gulp');
 
 var Task = Elixir.Task;
 
-Elixir.extend('jsonImagesSaver', function (src, pipe, options)
+Elixir.extend('jsonImagesSaver', function (src, pipe, extension, options)
 {
     new Task('jsonImagesSaver', function ()
     {
@@ -19,7 +19,7 @@ Elixir.extend('jsonImagesSaver', function (src, pipe, options)
             .src(src)
             .pipe(Print())
             .pipe(Plumber())
-            .pipe(imagesSaver(options))
+            .pipe(imagesSaver(extension,options))
             .pipe(pipe)
             .pipe(Print());
     }).watch(src);
