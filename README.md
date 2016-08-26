@@ -12,9 +12,9 @@ It can be easily integrated with the output of [static site creator](https://git
 - [x] custom base 64 pattern
 - [x] *any name* support
 - [ ] *any name* support for multiple keys
+- [x] delete old images as option (in gulp version)
 
 ## TODO
 - [ ] test wrong cases for base64_structure
 - [ ] travis integration
 - [ ] elixir notify
-- [ ] delete old images as option (default false)

@@ -10,6 +10,7 @@ var jsonImagesSaver = require('./index');
 var StreamFromPromise = require('stream-from-promise');
 var vinylBuffer = require('vinyl-buffer');
 var fsp = require('fs-promise');
+const rimrafPromise = require('rimraf-promise');
 
 // Consts
 const PLUGIN_NAME = 'json-images-saver';
@@ -28,6 +29,10 @@ function gulpJsonImagesSaver(fileExtension, options) {
     if (!('images_path' in options))
         options.images_path = 'public/images/';
 
+    var delete_files = false;
+    if (('delete_files' in options) && options.delete_files)
+        delete_files = true;
+
     // Creating a stream through which each file will pass
     return through.obj(function(file, enc, cb) {
         let optionsCopy = JSON.parse(JSON.stringify(options));
@@ -36,11 +41,13 @@ function gulpJsonImagesSaver(fileExtension, options) {
             return cb(null, file);
         }
         if (file.isBuffer()) {
-            let name = file.path.split('/'); //TODO checks
+            let name = file.path.split('/'); //TODO check length
             name = name[name.length-1];
             optionsCopy.images_path = optionsCopy.images_path + name.substr(0,name.length-(fileExtension.length+1)) + '/'; //+1 of .
             return fsp.stat(optionsCopy.images_path)
                 .catch(()=>fsp.mkdir(optionsCopy.images_path))
+                .then(()=>delete_files?rimrafPromise(optionsCopy.images_path):'')
+                .then(()=>delete_files?fsp.mkdir(optionsCopy.images_path):'')
                 .then(()=>jsonImagesSaver(file.contents.toString('utf-8'), optionsCopy))
                 .then((value)=> {
                     file.contents = new Buffer(JSON.stringify(value));
