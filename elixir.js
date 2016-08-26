@@ -20,7 +20,7 @@ Elixir.extend('jsonImagesSaver', function (src, pipe, extension, options)
             .pipe(Print())
             .pipe(Plumber())
             .pipe(imagesSaver(extension,options))
-            .pipe(pipe)
+            .pipe(pipe())
             .pipe(Print());
     }).watch(src);
 });
