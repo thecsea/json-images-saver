@@ -18,10 +18,19 @@ It can be easily integrated with the output of [static site creator](https://git
 - [ ] test wrong cases for base64_structure
 - [ ] travis integration
 - [ ] elixir notify
+- [ ] remove old dir when dir name is changed
 
 ## Examples
 ### Elixir with gulp
 ``` javascript
+"use strict";
+var elixir = require('laravel-elixir');
+require('laravel-elixir-pug');
+require('json-images-saver/elixir');
+var fs = require('fs');
+var gulp = require('gulp');
+var through = require('through2');
+var args = require('yargs').argv;
 
 class JsonCollection{
 
@@ -92,3 +101,5 @@ elixir(function (mix) {
 });
 
 ```
+
+*locked* is used in pug file to lock the compilation until the json is ready, this way is needed because we have to call elixir-pug at the begining to initialize it (to create the gulp task)
