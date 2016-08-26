@@ -102,4 +102,5 @@ elixir(function (mix) {
 
 ```
 
-*locked* is used in pug file to lock the compilation until the json is ready, this way is needed because we have to call elixir-pug at the begining to initialize it (to create the gulp task)
+- *locked* is used in pug file to lock the compilation until the json is ready, this way is needed because we have to call elixir-pug at the begining to initialize it (to create the gulp task)
+- the timeout is needed to start jsonImagesSaver the first time, to have data to pass pug (they are stored only in the memory)
