@@ -18,3 +18,77 @@ It can be easily integrated with the output of [static site creator](https://git
 - [ ] test wrong cases for base64_structure
 - [ ] travis integration
 - [ ] elixir notify
+
+## Examples
+### Elixir with gulp
+``` javascript
+
+class JsonCollection{
+
+    constructor() {
+        this._list =  [];
+        this.data = {};
+    }
+
+    set(name, json){
+        if(!(name in this._list))
+            this.add(name);
+        try {
+            this._list[name] = JSON.parse(json.toString('utf-8'));
+        }catch(e){
+            this._list[name] = json.toString('utf-8');
+        }
+    }
+
+    add(name){
+        var _this = this;
+        Object.defineProperty(this.data, name, { get: function() { return _this._list[name]} , set: function(value){}, enumerable: true, configurable: true});
+    }
+}
+
+function jsonPipe() {
+    return function () {
+        // Creating a stream through which each file will pass
+        var stream = through.obj(function (file, enc, cb) {
+            if (file.isNull()) {
+                // return empty file
+                return cb(null, file);
+            }
+            if (file.isBuffer()) {
+                let name = file.path.split('/'); //TODO checks
+                name = name[name.length - 1];
+                jsonCollection.set(name.substr(0, name.length - ('json'.length + 1)), file.contents);
+                return cb(null, file);
+            }
+            if (file.isStream()) {
+                return cb(new PluginError(PLUGIN_NAME, 'Not yet supported'));
+            }
+        });
+        stream.on('end', function () {
+            pugVars.locked = false;
+            gulp.start('pug');
+        });
+        return stream;
+    }
+}
+
+var jsonCollection = new JsonCollection();
+var pugVars = {locked:true};
+
+elixir(function (mix) {
+    mix.jsonImagesSaver('data/**/*.json',jsonPipe(),'json',{images_path:__dirname+'/public/img/data/', delete_files:true})
+        .pug({
+            locals: {
+                data: jsonCollection,
+                pugVars: pugVars
+            },
+        });
+    if(args._.indexOf('watch') != -1) {
+        setTimeout(()=> {
+            fs.writeFile(__dirname + '/data/test.json', '{"time":"' + new Date().toTimeString() + '"}', function () {
+            });
+        }, 1000);
+    }
+});
+
+```
