@@ -1,5 +1,7 @@
 # json-images-saver
 
+[![npm version](https://badge.fury.io/js/json-images-saver.svg)](https://badge.fury.io/js/json-images-saver)
+
 Save to files all base64 images contained in the json
 
 It can be easily integrated with the output of [static site creator](https://github.com/thecsea/static-site-creator)
