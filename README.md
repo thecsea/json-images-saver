@@ -23,6 +23,20 @@ It can be easily integrated with the output of [static site creator](https://git
 - [ ] remove old dir when dir name is changed
 
 ## Examples
+
+### Elixir
+``` javascript
+"use strict";
+var elixir = require('laravel-elixir');
+require('laravel-elixir-pug');
+var gulp = require('gulp');
+
+elixir(function (mix) {
+    mix.jsonImagesSaver('data/**/*.json',()=>gulp.dest('out),'json',{images_path:__dirname+'/public/img/data/', delete_files:true});
+});
+
+```
+
 ### Elixir with gulp
 ``` javascript
 "use strict";
