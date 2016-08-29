@@ -32,7 +32,7 @@ require('laravel-elixir-pug');
 var gulp = require('gulp');
 
 elixir(function (mix) {
-    mix.jsonImagesSaver('data/**/*.json',()=>gulp.dest('out),'json',{images_path:__dirname+'/public/img/data/', delete_files:true});
+    mix.jsonImagesSaver('data/**/*.json',()=>gulp.dest('out'),'json',{images_path:__dirname+'/public/img/data/', delete_files:true});
 });
 
 ```
