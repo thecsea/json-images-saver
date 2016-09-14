@@ -37,7 +37,7 @@ elixir(function (mix) {
 
 ```
 
-### Elixir with gulp
+### Elixir with pug
 ``` javascript
 "use strict";
 var elixir = require('laravel-elixir');
