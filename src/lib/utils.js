@@ -16,4 +16,4 @@ exports.getField = function getField(field, obj){
     return getField(field, obj[name]);
 };
 
-String.prototype.parseForUrl = function(){return this.trim().toLocaleLowerCase().replace(new RegExp('( )|(\\\\)|(/)|(\')|(#)', 'g'), '-')};
+exports.parseForUrl = function(string){return string.trim().toLocaleLowerCase().replace(new RegExp('( )|(\\\\)|(/)|(\')|(#)', 'g'), '-')};

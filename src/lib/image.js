@@ -11,7 +11,7 @@ module.exports = class Image{
         this.image = image;
         this.fields = fields;
         this.path = path;
-        this.name = name + this.getName().parseForUrl();
+        this.name = name + utils.parseForUrl(this.getName());
         if(!extension_in_name)
             this.name += '.' + this.getExtension();
     }
