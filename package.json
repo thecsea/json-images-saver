@@ -1,6 +1,6 @@
 {
   "name": "json-images-saver",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Save to files all base64 images contained in the json",
   "main": "index.js",
   "scripts": {
