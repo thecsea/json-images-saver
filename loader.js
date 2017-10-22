@@ -39,6 +39,6 @@ module.exports = function(source) {
     .then(()=>delete_files?rimrafPromise(optionsCopy.images_path):'')
     .then(()=>delete_files?fsp.mkdir(optionsCopy.images_path):'')
     .then(()=>jsonImagesSaver(source, optionsCopy, (image_path, content)=>{this.emitFile(path.normalize(image_path), content.toString()); return Promise.resolve()}))
-    .then((value)=> callback(null, value))
+    .then((value)=> callback(null, `module.exports = ${JSON.stringify(value)}`))
     .catch((err)=>callback(err instanceof Error ? err : new Error(err)));
 };
