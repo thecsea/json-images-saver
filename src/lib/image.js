@@ -7,17 +7,18 @@ var mime = require('mime-types');
 var fsp = require('fs-promise');
 
 module.exports = class Image{
-    constructor(image, name, path, fields, extension_in_name) {
+    constructor(image, name, path, fields, extension_in_name, saveImageFunction) {
         this.image = image;
         this.fields = fields;
         this.path = path;
         this.name = name + utils.parseForUrl(this.getName());
         if(!extension_in_name)
             this.name += '.' + this.getExtension();
+        this.saveImageFunction = (saveImageFunction && typeof saveImageFunction == 'function') ? saveImageFunction:fsp.writeFile;
     }
 
     write(){
-        return fsp.writeFile(this.path + this.name , this.base64Decode())
+        return this.saveImageFunction(this.path + this.name , this.base64Decode())
             .then(()=>{
                 //console.info(this.name +' saved!');
             })

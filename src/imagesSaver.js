@@ -4,10 +4,12 @@
 "use strict";
 var Extend = require('extend');
 var Pick = require('object.pick');
+var fsp = require('fs-promise');
 var ImageCollection = require('./lib/imageCollection');
 
 module.exports = class ImagesSaver {
-    constructor(content, options){
+    constructor(content, options, saveImageFunction){
+        this.saveImageFunction = (saveImageFunction && typeof saveImageFunction == 'function') ? saveImageFunction:fsp.writeFile
         this.options = ImagesSaver.validateOptions(options);
         if(typeof content === 'string') {
             try {
@@ -62,7 +64,7 @@ module.exports = class ImagesSaver {
         if(typeof content === 'undefined')
             content = this.content;
         if(typeof collection === 'undefined')
-            collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name);
+            collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name, this.saveImageFunction);
 
         var content = JSON.parse(JSON.stringify(content));
         var promises = [];
