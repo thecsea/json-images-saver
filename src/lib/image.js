@@ -4,7 +4,7 @@
 "use strict";
 var utils = require('./utils');
 var mime = require('mime-types');
-var fsp = require('fs-promise');
+var fsp = require('fs-extra');
 
 module.exports = class Image{
     constructor(image, name, path, fields, extension_in_name, saveImageFunction) {

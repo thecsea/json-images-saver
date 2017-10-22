@@ -5,7 +5,7 @@ var chai = require('chai');
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 var ImageCollection = require('../src/lib/imageCollection');
-var fsp = require('fs-promise');
+var fsp = require('fs-extra');
 var fs = require('fs');
 
 chai.should();

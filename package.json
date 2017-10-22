@@ -1,6 +1,6 @@
 {
   "name": "json-images-saver",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Save to files all base64 images contained in the json",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/thecsea/json-images-saver#readme",
   "dependencies": {
     "extend": "^3.0.0",
-    "fs-promise": "^0.5.0",
+    "fs-extra": "^4.0.2",
     "gulp": "^3.9.1",
     "gulp-plumber": "^1.1.0",
     "gulp-print": "^2.0.1",

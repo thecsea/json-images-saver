@@ -9,7 +9,7 @@ var PluginError = gutil.PluginError;
 var jsonImagesSaver = require('./index');
 var StreamFromPromise = require('stream-from-promise');
 var vinylBuffer = require('vinyl-buffer');
-var fsp = require('fs-promise');
+var fsp = require('fs-extra');
 const rimrafPromise = require('rimraf-promise');
 
 // Consts

@@ -4,7 +4,7 @@
 "use strict";
 var Extend = require('extend');
 var Pick = require('object.pick');
-var fsp = require('fs-promise');
+var fsp = require('fs-extra');
 var ImageCollection = require('./lib/imageCollection');
 
 module.exports = class ImagesSaver {

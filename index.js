@@ -9,6 +9,6 @@ var ImagesSaver = require('./src/imagesSaver');
  * @param options
  * @returns Promise
  */
-module.exports = function(content, options){
-    return new ImagesSaver(content, options).parse();
+module.exports = function(content, options, saveImageFunction){
+    return new ImagesSaver(content, options, saveImageFunction).parse();
 }
