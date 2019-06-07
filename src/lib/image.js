@@ -5,7 +5,8 @@
 var utils = require('./utils');
 var mime = require('mime-types');
 var fsp = require('fs-extra');
-const convertSvgPng = require('convert-svg-to-png');
+const util = require('util');
+var svg2img = util.promisify(require('svg2img'));
 
 module.exports = class Image{
     constructor(image, name, path, fields, extension_in_name, saveImageFunction, convertSVG) {
@@ -33,7 +34,7 @@ module.exports = class Image{
 
     getConvertedImg(){
         var img = this.base64Decode();
-        if(this.convertSVG && utils.getField(this.fields.mime.split('/').reverse(),  this.image) == 'image/svg+xml') img = convertSvgPng.convert(img);
+        if(this.convertSVG && utils.getField(this.fields.mime.split('/').reverse(),  this.image) == 'image/svg+xml') img = svg2img(img);
         else img = Promise.resolve(img);
         return img;
     }
