@@ -20,11 +20,10 @@ module.exports = class Image{
     }
 
     write(){
-        //TODO extension
+        if(this.convertSVG) this.name = this.name.replace(/\.svg$/gi,'.png');
         return this.getConvertedImg()
             .then(img=>this.saveImageFunction(this.path + this.name , img))
             .then(()=>{
-                if(this.convertSVG) this.name = this.name.replace(/\.svg$/gi,'.png');
                 //console.info(this.name +' saved!');
             })
             .catch((err)=>{
@@ -34,7 +33,7 @@ module.exports = class Image{
 
     getConvertedImg(){
         var img = this.base64Decode();
-        if(this.convertSVG && this.fields.mime == 'image/svg+xml') img = convertSvgPng(img);
+        if(this.convertSVG && utils.getField(this.fields.mime.split('/').reverse(),  this.image) == 'image/svg+xml') img = convertSvgPng.convert(img);
         else img = Promise.resolve(img);
         return img;
     }
