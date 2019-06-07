@@ -55,7 +55,8 @@ describe('Image Saver', () => {
                         mime: 'filetype',
                         name: 'filename',
                     },
-                    extension_in_name: true
+                    extension_in_name: true,
+                    convertSVG: true,
                 }));
             });
 

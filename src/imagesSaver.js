@@ -35,7 +35,8 @@ module.exports = class ImagesSaver {
                 base64:'something'
             },
             fields: {},
-            extension_in_name: true
+            extension_in_name: true,
+            convertSVG: true,
         }, options);
 
         options.fields = Extend({
@@ -54,7 +55,8 @@ module.exports = class ImagesSaver {
             'images_path',
             'base64_structure',
             'fields',
-            'extension_in_name'
+            'extension_in_name',
+            'convertSVG',
         ]);
 
         return options;
@@ -64,7 +66,7 @@ module.exports = class ImagesSaver {
         if(typeof content === 'undefined')
             content = this.content;
         if(typeof collection === 'undefined')
-            collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name, this.saveImageFunction);
+            collection = new ImageCollection(this.options.images_path, this.options.fields, this.options.extension_in_name, this.saveImageFunction, this.options.convertSVG);
 
         var content = JSON.parse(JSON.stringify(content));
         var promises = [];
