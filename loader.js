@@ -29,6 +29,6 @@ module.exports = function(source) {
   optionsCopy.images_path = optionsCopy.images_path.substr(0,optionsCopy.images_path.length-(optionsCopy.additional_extension.length)) + '/';
 
   return jsonImagesSaver(source, optionsCopy, (image_path, content)=>{this.emitFile(path.normalize(image_path), content); return Promise.resolve()})
-    .then((value)=> callback(null, `module.exports = ${JSON.stringify(value)}`))
+    .then((value)=> callback(null, optionsCopy.raw ? `${JSON.stringify(value)}` : `module.exports = ${JSON.stringify(value)}`))
     .catch((err)=>callback(err instanceof Error ? err : new Error(err)));
 };
