@@ -29,7 +29,7 @@
     "gulp": "^3.9.1",
     "gulp-plumber": "^1.1.0",
     "gulp-print": "^2.0.1",
-    "loader-utils": "^1.1.0",
+    "loader-utils": "^3.2.1",
     "lodash": "^4.17.4",
     "mime-types": "^2.1.11",
     "object.pick": "^1.1.2",
